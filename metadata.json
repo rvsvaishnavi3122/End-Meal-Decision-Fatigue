@@ -1,0 +1,6 @@
+{
+  "name": "Smart Meal Finder",
+  "description": "An AI-powered application to find healthy meals based on ingredients, dietary preferences, and nutritional goals.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": []
+}

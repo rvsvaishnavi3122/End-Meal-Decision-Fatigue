@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Validation Helpers
+    function isValidUserProfile(data) {
+      return data.uid == request.auth.uid &&
+             data.email is string &&
+             data.email.size() <= 200 &&
+             data.displayName is string &&
+             data.displayName.size() <= 100 &&
+             data.dietaryPreference is string &&
+             data.allergies is list &&
+             data.createdAt is int;
+    }
+
+    function isValidMealPlan(data) {
+      return data.userId == request.auth.uid &&
+             data.recipe is map &&
+             data.date is string &&
+             data.date.size() == 10 &&
+             data.mealType in ['Breakfast', 'Lunch', 'Dinner', 'Snack'] &&
+             data.createdAt is int;
+    }
+
+    // users/{userId}
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUserProfile(request.resource.data);
+      allow update: if isOwner(userId) && 
+                      (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['dietaryPreference', 'allergies', 'displayName']));
+      
+      // users/{userId}/mealPlans/{planId}
+      match /mealPlans/{planId} {
+        allow list, get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidMealPlan(request.resource.data);
+        allow update: if isOwner(userId) && 
+                        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['date', 'mealType', 'recipe']));
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

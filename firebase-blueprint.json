@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user settings and preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "dietaryPreference": { "type": "string" },
+        "allergies": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["uid", "email", "dietaryPreference", "allergies", "createdAt"]
+    },
+    "MealPlan": {
+      "title": "Meal Plan",
+      "description": "Scheduled meal for a user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "recipe": { "$ref": "#/entities/Recipe" },
+        "date": { "type": "string" },
+        "mealType": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "userId", "recipe", "date", "mealType", "createdAt"]
+    },
+    "Recipe": {
+      "title": "Recipe",
+      "description": "Recipe details",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "ingredients": { "type": "array", "items": { "type": "string" } },
+        "instructions": { "type": "array", "items": { "type": "string" } },
+        "prepTime": { "type": "string" },
+        "calories": { "type": "number" },
+        "dietaryTags": { "type": "array", "items": { "type": "string" } },
+        "imageUrl": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Profiles of registered users"
+    },
+    "/users/{userId}/mealPlans/{planId}": {
+      "schema": "MealPlan",
+      "description": "Saved meal planning for the user"
+    }
+  }
+}
