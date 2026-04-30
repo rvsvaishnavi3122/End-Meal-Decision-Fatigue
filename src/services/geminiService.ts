@@ -17,7 +17,7 @@ export async function generateRecipes(
     
     Dietary Preference: ${dietaryPreference}.
     Cuisine Type: ${cuisineType}.
-    Meal Type: ${mealType}.
+    Meal Type: ${mealType}. (CRITICAL: The recipes MUST be appropriate for this meal type. If 'Breakfast', focus on morning meals. If 'Snack', focus on small portions.)
     Maximum Cooking Time: ${maxTime}.
     Additional Goals/Notes: ${additionalGoal}.
     
@@ -28,7 +28,7 @@ export async function generateRecipes(
     - Numbered cooking instructions
     - Preparation time (e.g., "25 minutes")
     - Estimated calories per serving
-    - Relevant dietary tags (e.g., "Vegan", "Vegetarian", "Non-Vegetarian", "Gluten-Free")
+    - Relevant dietary tags (e.g., "Vegan", "Vegetarian", "Non-Vegetarian", "Gluten-Free") - ALWAYS include the "${mealType}" as one of the tags if it is not 'Any'.
   `;
 
   try {

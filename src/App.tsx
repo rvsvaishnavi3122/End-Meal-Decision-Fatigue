@@ -296,16 +296,24 @@ export default function App() {
                 </div>
 
                 {allRecipes.length > 0 && (
-                  <div className="flex items-center justify-between pt-2">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  <div className="flex items-center gap-4 pt-2 overflow-x-auto no-scrollbar pb-1">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-auto whitespace-nowrap">
                       {filteredRecipes.length} Results Found
                     </p>
                     <button 
+                      onClick={handleGenerate}
+                      disabled={isLoading}
+                      className="text-[10px] font-bold text-bento-accent uppercase tracking-widest flex items-center gap-1.5 hover:underline disabled:opacity-50 whitespace-nowrap"
+                    >
+                      {isLoading ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                      Regenerate
+                    </button>
+                    <button 
                       onClick={() => setActiveTab('pantry')}
-                      className="text-[10px] font-bold text-bento-accent uppercase tracking-widest flex items-center gap-1.5 hover:underline"
+                      className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 hover:underline whitespace-nowrap"
                     >
                       <RefreshCw className="w-3 h-3" />
-                      Refine Pantry
+                      Refine
                     </button>
                   </div>
                 )}
@@ -356,7 +364,7 @@ export default function App() {
                     <h2 className="text-xl font-display font-bold text-slate-900 leading-none">Your Pantry</h2>
                     <p className="text-[10px] text-bento-accent font-bold uppercase tracking-widest">Scanning {ingredients.length} items</p>
                   </div>
-                  <div className="flex gap-2">
+                    <div className="flex gap-2">
                     <input 
                       type="file" 
                       accept="image/*" 
@@ -374,6 +382,24 @@ export default function App() {
                       {isAnalyzing ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
                     </button>
                   </div>
+                </div>
+
+                {/* Preference Summary */}
+                <div className="flex gap-2 mb-6">
+                  <div className="px-3 py-1.5 bg-white border border-orange-100 rounded-lg flex items-center gap-2">
+                    <Utensils className="w-3 h-3 text-bento-accent" />
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-tight">{mealType}</span>
+                  </div>
+                  <div className="px-3 py-1.5 bg-white border border-orange-100 rounded-lg flex items-center gap-2">
+                    <Filter className="w-3 h-3 text-bento-accent" />
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-tight">{dietaryPreference}</span>
+                  </div>
+                  <button 
+                    onClick={() => setActiveTab('home')}
+                    className="ml-auto px-3 py-1.5 text-[10px] font-bold text-bento-accent uppercase tracking-tight hover:underline"
+                  >
+                    Change
+                  </button>
                 </div>
                 
                 <div className="space-y-4">
